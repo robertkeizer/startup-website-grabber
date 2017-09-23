@@ -1,68 +1,47 @@
-# startup-website-grabber
+# Startup Website Grabber
 
-Provides for an easy way to grab URLs of startup companies. Currently scrapes 500 Startups to facilitate this.
+Provides for an easy way to grab URLs of startup companies. 
 
-# Interface
+ - [x] Grabs startup website links.
+ - [ ] Takes screenshot of main page.
+ - [ ] Takes video of website scroll.
+ - [ ] Gets performance metrics of website JS runtime.
 
-```
-s = new StartupWebsiteGrabber( );
-s.availableProviders( ) // [ "500" ]
-s.grab( howMany = 100, whatProvider = "500", function( err ){ }
-s.stop() // Stops grabbing links. 
-```
+## Getting Started
 
-# Examples
+### availableProviders()
+Returns a simple array of names of providers; Right now only 500 Startups is used.
 
-Default behaviour yields ~100 results.
-```
-const StartupWebsiteGrabber = require( "startup-website-grabber" );
+### grab( *howMany*, *providerName*, cb )
+Both *howMany* and *providerName* are optional. Defaults to 100 and "500" for 500 Startups.
 
-const inst = new StartupWebsiteGrabber( );
+### stop()
+If you'd like to stop the grab that is currently going on.
+
+## Examples
+```js
+const StartupWebsiteGrabber	= require( "startup-website-grabber" );
+const inst			= new StartupWebsiteGrabber( );
 
 inst.on( "link", function( link ){
-	console.log( link ); // http://somestartupsite.tld
+	console.log( link );
 } );
 
 inst.grab( function( err ){
-	if( err ){
-		 // Handle error
-	}
-	// done the grab.
-} );
-```
-
-Specifying a provider (only '500' is available right now)
-```
-const StartupWebsiteGrabber = require( "startup-website-grabber" );
-
-const inst = new StartupWebsiteGrabber( );
-
-inst.on( "link", function( link ){
-	console.log( link ); // http://somestartupsite.tld
-} );
-
-inst.grab( "500", function( err ){
-	if( err ){
-		 // Handle error
-	}
 	// done the grab.
 } );
 ```
 
 Alternative limit on the maximum number of results returned; Default is 100.
 ```
-const StartupWebsiteGrabber = require( "startup-website-grabber" );
-
-const inst = new StartupWebsiteGrabber( );
+const StartupWebsiteGrabber	= require( "startup-website-grabber" );
+const inst			= new StartupWebsiteGrabber( );
 
 inst.on( "link", function( link ){
-	console.log( link ); // http://somestartupsite.tld
+	console.log( link );
 } );
 
 inst.grab( 1000, "500", function( err ){
-	if( err ){
-		 // Handle error
-	}
 	// done the grab.
 } );
 ```
