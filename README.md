@@ -1,5 +1,8 @@
 # Startup Website Grabber
 
+[![Travis CI](https://travis-ci.org/robertkeizer/startup-website-grabber.svg?branch=master)](https://travis-ci.org/robertkeizer/startup-website-grabber)
+
+
 Provides for an easy way to grab URLs of startup companies. 
 
  - [x] Grabs startup website links.
