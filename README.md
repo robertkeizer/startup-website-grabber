@@ -9,8 +9,8 @@ Provides for an easy way to grab URLs of startup companies.
 
 ## Getting Started
 
-### grab( *howMany=100*, *providerName="500"*, cb )
-Start to grab links and emit them. Both *howMany* and *providerName* are optional.
+### grab( *howMany=100*, *providerName="500"*, callback )
+Start to grab links and emit them. Both *howMany* and *providerName* are optional. `callback` takes a single optional error as an argument.
 
 ### availableProviders()
 Returns a simple array of names of providers; Right now only 500 Startups is used.
@@ -19,7 +19,9 @@ Returns a simple array of names of providers; Right now only 500 Startups is use
 ### stop()
 If you'd like to stop the grab that is currently going on.
 
-## Examples
+## Usage
+
+**Example**: Grab the first ~100 links.
 ```js
 const StartupWebsiteGrabber	= require( "startup-website-grabber" );
 const inst			= new StartupWebsiteGrabber( );
@@ -33,7 +35,7 @@ inst.grab( function( err ){
 } );
 ```
 
-Alternative limit on the maximum number of results returned.
+**Example**: Use an alternative limit on the maximum number of results returned.
 ```js
 const StartupWebsiteGrabber	= require( "startup-website-grabber" );
 const inst			= new StartupWebsiteGrabber( );
