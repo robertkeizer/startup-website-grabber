@@ -50,3 +50,6 @@ new StartupWebsiteGrabber( function( err, inst ){
 	} );
 } );
 ```
+
+## License
+[2-Clause BSD](https://opensource.org/licenses/BSD-2-Clause)

@@ -1,6 +1,10 @@
 {
   "name": "startup-website-grabber",
-  "version": "0.1.1",
+  "version": "0.1.2",
+  "description": "Grabs links to startup websites.",
+  "keywords": "links scrape startup 500 500co grab crawl url urls",
+  "bugs": { "url" : "https://github.com/robertkeizer/startup-website-grabber/issues" },
+  "license": "BSD-2-Clause",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha -t 60000"
   },
