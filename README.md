@@ -9,8 +9,11 @@ Provides for an easy way to grab URLs of startup companies.
 
 ## Usage
 
+### constructor( callback )
+`callback` takes the form of `( err, instance )` and is called when the initial loading of the module is done. Not using the callback results in a race condition when attempting to load and use providers.
+
 ### grab( *howMany=100*, *providerName="500"*, callback )
-Start to grab links and emit them. Both *howMany* and *providerName* are optional. `callback` takes a single optional error as an argument.
+Start to grab links and emit them. Both *howMany* and *providerName* are optional. `callback` takes a single error as an argument.
 
 ### availableProviders()
 Returns a simple array of names of providers; Right now only 500 Startups is used.
@@ -18,6 +21,7 @@ Returns a simple array of names of providers; Right now only 500 Startups is use
 ### stop()
 If you'd like to stop the grab that is currently going on.
 
+## Examples
 **Example**: Grab the first ~100 links.
 ```js
 const StartupWebsiteGrabber = require( "startup-website-grabber" );
