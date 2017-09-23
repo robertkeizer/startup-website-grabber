@@ -1,6 +1,10 @@
 {
   "name": "startup-website-grabber",
   "version": "0.0.1",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha -t 60000"
+  },
+  "main": "src/grabber.js",
   "dependencies": {
     "async": "^2.5.0",
     "cheerio": "^1.0.0-rc.2",
