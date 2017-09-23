@@ -20,28 +20,29 @@ If you'd like to stop the grab that is currently going on.
 
 **Example**: Grab the first ~100 links.
 ```js
-const StartupWebsiteGrabber	= require( "startup-website-grabber" );
-const inst			= new StartupWebsiteGrabber( );
+const StartupWebsiteGrabber = require( "startup-website-grabber" );
 
-inst.on( "link", function( link ){
-	console.log( link );
-} );
+new StartupWebsiteGrabber( function( err, inst ){
+	inst.on( "link", function( link ){
+		console.log( link );
+	} );
 
-inst.grab( function( err ){
-	// done the grab.
+	inst.grab( function( err ){
+		// done the grab.
+	} );
 } );
 ```
 
 **Example**: Use an alternative limit on the maximum number of results returned.
 ```js
-const StartupWebsiteGrabber	= require( "startup-website-grabber" );
-const inst			= new StartupWebsiteGrabber( );
+const StartupWebsiteGrabber = require( "startup-website-grabber" );
+new StartupWebsiteGrabber( function( err, inst ){
+	inst.on( "link", function( link ){
+		console.log( link );
+	} );
 
-inst.on( "link", function( link ){
-	console.log( link );
-} );
-
-inst.grab( 1000, "500", function( err ){
-	// done the grab.
+	inst.grab( 1000, "500", function( err ){
+		// done the grab.
+	} );
 } );
 ```
