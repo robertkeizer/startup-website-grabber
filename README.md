@@ -34,7 +34,7 @@ Returns a simple array of names of providers; Right now only 500 Startups is use
 If you'd like to stop the grab that is currently going on.
 
 ## Examples
-**Example**: Grab the first ~100 links.
+**Example**: Grab the first ~100 links from a random provider.
 ```js
 const StartupWebsiteGrabber = require( "startup-website-grabber" );
 
@@ -49,7 +49,7 @@ new StartupWebsiteGrabber( function( err, inst ){
 } );
 ```
 
-**Example**: Use an alternative limit on the maximum number of results returned.
+**Example**: Use an alternative limit on the maximum number of results returned from a specific provider.
 ```js
 const StartupWebsiteGrabber = require( "startup-website-grabber" );
 new StartupWebsiteGrabber( function( err, inst ){
@@ -57,7 +57,7 @@ new StartupWebsiteGrabber( function( err, inst ){
 		console.log( link );
 	} );
 
-	inst.grab( 1000, "500", function( err ){
+	inst.grab( { howMany: 1000, provider: "500" }, function( err ){
 		// done the grab.
 	} );
 } );
