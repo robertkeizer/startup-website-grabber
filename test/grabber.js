@@ -20,41 +20,7 @@ describe( "Grabber", function( ){
 		} );
 	} );
 
-	it( "grab works with all arguments specified", function( cb ){
-		const Grabber = require( "../src/grabber" );
-		new Grabber( function( err, inst ){
-			if( err ){ return cb( err ); }
-			
-			let _links = [ ];
-			inst.on( "link", function( link ){
-				_links.push( link );
-			} );
-			inst.grab( 1, "500", function( err ){
-				if( err ){ return cb( err ); }
-				if( _links.length > 0 ){ return cb( null ); }
-				return cb( "No results returned." );
-			} );
-		} );
-	} );
-
-	it( "grab works with optional provider", function( cb ){
-		const Grabber = require( "../src/grabber" );
-		new Grabber( function( err, inst ){
-			if( err ){ return cb( err ); }
-			
-			let _links = [ ];
-			inst.on( "link", function( link ){
-				_links.push( link );
-			} );
-			inst.grab( 1, function( err ){
-				if( err ){ return cb( err ); }
-				if( _links.length > 0 ){ return cb( null ); }
-				return cb( "No results returned." );
-			} );
-		} );
-	} );
-
-	it( "grab works with only a callback", function( cb ){
+	it( "Grab works with default options", function( cb ){
 		const Grabber = require( "../src/grabber" );
 		new Grabber( function( err, inst ){
 			if( err ){ return cb( err ); }
@@ -67,6 +33,20 @@ describe( "Grabber", function( ){
 				if( err ){ return cb( err ); }
 				if( _links.length > 0 ){ return cb( null ); }
 				return cb( "No results returned." );
+			} );
+		} );
+	} );
+
+	it( "Grab fails if provider not found", function( cb ){
+		const Grabber = require( "../src/grabber" );
+		new Grabber( function( err, inst ){
+			if( err ){ return cb( err ); }
+			
+			inst.grab( { provider: "nope" }, function( err ){
+				if( !err ){
+					return cb( "no error came back" );
+				}
+				return cb( null );
 			} );
 		} );
 	} );
