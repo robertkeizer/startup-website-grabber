@@ -1,6 +1,6 @@
 {
   "name": "startup-website-grabber",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Grabs links to startup websites.",
   "keywords": "links scrape startup 500 500co grab crawl url urls",
   "bugs": {
