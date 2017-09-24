@@ -16,9 +16,11 @@ Provides for an easy way to grab URLs of startup companies.
 `callback` takes the form of `( err, instance )` and is called when the initial loading of the module is done. Not using the callback results in a race condition when attempting to load and use providers.
 
 ### grab( *options*, callback )
-Starts grabbing links and taking screenshots of websites based on the options specified. The `options` argument is optional, and defaults to the following:
+Starts grabbing links and taking screenshots of websites based on the options specified.
 
-```json
+The `options` argument is optional, and defaults to the following:
+
+```
 {
 	howMany: 100,
 	provider: randomProvider,
