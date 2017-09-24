@@ -15,8 +15,17 @@ Provides for an easy way to grab URLs of startup companies.
 ### constructor( callback )
 `callback` takes the form of `( err, instance )` and is called when the initial loading of the module is done. Not using the callback results in a race condition when attempting to load and use providers.
 
-### grab( *howMany=100*, *providerName="500"*, callback )
-Start to grab links and emit them. Both *howMany* and *providerName* are optional. `callback` takes a single error as an argument.
+### grab( *options*, callback )
+Starts grabbing links and taking screenshots of websites based on the options specified. The `options` argument is optional, and defaults to the following:
+
+```json
+{
+	howMany: 100,
+	provider: randomProvider,
+	links: true,
+	screenshots: false
+}
+```
 
 ### availableProviders()
 Returns a simple array of names of providers; Right now only 500 Startups is used.

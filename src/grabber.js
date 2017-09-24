@@ -70,7 +70,7 @@ Grabber.prototype.grab = function( options, cb ){
 		return _provider.name == optionsToUse.provider;
 	} );
 	if( _providersFound.length == 0 ){
-		return cb( "Provider " + optionsToUse.provider + " not found." );
+		return cb( "Provider '" + optionsToUse.provider + "' not found." );
 	}
 	const providerToUse = _providersFound[0];
 
