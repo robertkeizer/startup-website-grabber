@@ -50,4 +50,23 @@ describe( "Grabber", function( ){
 			} );
 		} );
 	} );
+
+	it.only( "Works if screenshots are specified", function( cb ){
+		const Grabber = require( "../src/grabber" );
+		new Grabber( function( err, inst ){
+			if( err ){ return cb( err ); }
+
+			inst.on( "screenshot", function( screenshot ){
+				console.log( "I have screenshot of " );
+				console.log( screenshot );
+			} );
+			
+			inst.grab( { screenshots: true }, function( err ){
+				if( err ){ return cb( err ); }
+				
+				return cb( null );
+			} );
+		} );
+	
+	} );
 } );

@@ -3,10 +3,32 @@ const async		= require( "async" );
 const EventEmitter	= require( "events" );
 const util		= require( "util" );
 const merge		= require( "merge" );
+const puppeteer		= require( "puppeteer" );
 
-const Grabber = function( cb ){
-
+const Grabber = function( options, cb ){
 	EventEmitter.call( this );
+
+	// Allow options to not be specified; This
+	// shifts the arguments so that we still have the
+	// callback function.
+	if( !cb && typeof( options ) == "function" ){
+		cb = options;
+		options = { };
+	}
+
+	// Instance wide default options; Things such as
+	// screen size if we take a screenshot/video, etc.
+	const defaultOptions = {
+		browser: {
+			viewport: {
+				width: 1280,
+				height: 800
+			}
+		}
+	};
+
+	// Set the options instance wide.
+	this.options = merge( defaultOptions, options );
 
 	this._providers = [ ];
 
@@ -102,7 +124,17 @@ Grabber.prototype.grab = function( options, cb ){
 		// that subroutine going; It takes care of
 		// emitting.
 		if( optionsToUse.screenshots ){
-			getScreenshot( link );
+
+			// Kick off the screenshot process; Note that
+			// we only have a function here to handle the
+			// callback for errors, so that if it dies,
+			// we also stop the instance grabbing more.
+			self.getScreenshot( link, function( err ){
+				if( err ){
+					cleanupInst( );
+					return cb( err );
+				}
+			} );
 		}
 	} );
 
@@ -118,6 +150,42 @@ Grabber.prototype.grab = function( options, cb ){
 	// call grab() again.
 	this.inst.on( "error", function( err ){ cleanupInst(); return cb( err ); } );
 	this.inst.on( "done", function( ){ cleanupInst(); return cb( null ); } );
+};
+
+// Get a screenshot for a particular url.
+Grabber.prototype.getScreenshot = function( link, cb ){
+
+	const self = this;
+	async.waterfall( [ function( cb ){
+
+		// Let's get the instance of chrome headless going;
+		// If we have created a browserOpen already, let's
+		// use it. Otherwise create a new one.
+
+		// Either call connect() or launch(); They have the
+		// same signature so we're good.
+		const funcToUse = self._browserOpen ? "connect" : "launch";
+
+		puppeteer[funcToUse]( ).then( function( browser ){
+			return cb( null, browser );
+		}, cb );
+
+	}, function( browser, cb ){
+
+		console.log( "I have a browser!" );
+		console.log( browser );
+		return cb( null );
+
+	} ], function( err ){
+		if( err ){ return cb( err ); }
+
+		self.emit( "screenshot", {
+			url: link,
+			browser: this.options.browser,
+			date: new Date( )
+		} );
+	} );
+
 };
 
 // Stops the instance that is running; Note that it 
