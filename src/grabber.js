@@ -8,6 +8,10 @@ const puppeteer		= require( "puppeteer" );
 const Grabber = function( options, cb ){
 	EventEmitter.call( this );
 
+	// Simple flag so that we don't create tons
+	// of browser processes for no reason.
+	this._browserOpen = false;
+
 	// Allow options to not be specified; This
 	// shifts the arguments so that we still have the
 	// callback function.
@@ -125,14 +129,16 @@ Grabber.prototype.grab = function( options, cb ){
 		// emitting.
 		if( optionsToUse.screenshots ){
 
-			// Kick off the screenshot process; Note that
-			// we only have a function here to handle the
-			// callback for errors, so that if it dies,
-			// we also stop the instance grabbing more.
+			// Get the screenshot; if we can't for some reason
+			// we want to let the outside know, but allow them
+			// to handle it in whatever manner they want.
 			self.getScreenshot( link, function( err ){
 				if( err ){
-					cleanupInst( );
-					return cb( err );
+					self.emit( "error", {
+						what: "screenshot",
+						link: link,
+						error: err
+					} );
 				}
 			} );
 		}
@@ -155,16 +161,44 @@ Grabber.prototype.grab = function( options, cb ){
 // Get a screenshot for a particular url.
 Grabber.prototype.getScreenshot = function( link, cb ){
 
+	console.log( "Grabbing screenshot for link" );
+	console.log( link );
+
 	const self = this;
 	async.waterfall( [ function( cb ){
 
-		// Let's get the instance of chrome headless going;
-		// If we have created a browserOpen already, let's
-		// use it. Otherwise create a new one.
+		// If the browser is opening; Wait until we
+		// have it open.
+		async.whilst( function( ){
+			return self._browserOpening == true;
+		}, function( cb ){
+			setTimeout( function( ){
+				cb( );
+			}, 1000 );
+		}, cb );
+		
+	}, function( cb ){
 
-		// Either call connect() or launch(); They have the
-		// same signature so we're good.
+		// Either call connect() or launch(); 
+		if( !this._browserOpen ){
+			this._browserOpening = true;
+			puppeteer.launch( ).then( function( browser ){
+				this._browserOpen = true;
+				this._browserOpening = false;
+			}, function( err ){
+				this._browserOpening = false;
+				return cb( err );
+			} );
+	
+			return;
+		}
+
+		// Already open; Let's connect to it.
+		puppeteer.connect( ).then( function( browser ){
+			
 		const funcToUse = self._browserOpen ? "connect" : "launch";
+
+		self._browserOpen = true;
 
 		puppeteer[funcToUse]( ).then( function( browser ){
 			return cb( null, browser );
@@ -172,18 +206,42 @@ Grabber.prototype.getScreenshot = function( link, cb ){
 
 	}, function( browser, cb ){
 
-		console.log( "I have a browser!" );
-		console.log( browser );
-		return cb( null );
+		// Let's get a page object.
+		browser.newPage( ).then( function( page ){
+			return cb( null, browser, page );
+		}, cb );
 
-	} ], function( err ){
+	}, function( browser, page, cb ){
+
+		// Navigate to the particular page.
+		page.goto( link, function( ){
+			return cb( null, browser, page );
+		}, cb );
+
+	}, function( browser, page, cb ){
+		
+		page.screenshot( ).then( function( screenshotBuffer ){
+
+			// Close the page since we don't need it anymore.
+			page.close();
+
+			return cb( null, screenshotBuffer );
+		}, cb );
+
+	} ], function( err, screenshotBuffer ){
 		if( err ){ return cb( err ); }
 
-		self.emit( "screenshot", {
+		// Let's define the object that we're going to return 
+		// in the callback and as an event.
+		const _objToReturn = {
 			url: link,
 			browser: this.options.browser,
-			date: new Date( )
-		} );
+			date: new Date( ),
+			screenshot: screenshotBuffer
+		};
+
+		self.emit( "screenshot", _objToReturn );
+		return cb( null, _objToReturn );
 	} );
 
 };
